@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarbonFootprintForm } from '../carbon-footprint-form/carbon-footprint-form';
 import { CarbonFootprintResult } from '../carbon-footprint-result/carbon-footprint-result';
+import { CarbonFootprintComputeService } from '../carbon-footprint-compute';
 
 @Component({
   selector: 'app-carbon-footprint',
@@ -12,29 +13,42 @@ import { CarbonFootprintResult } from '../carbon-footprint-result/carbon-footpri
   styleUrls: ['./carbon-footprint.css']
 })
 export class CarbonFootprintComponent {
-  distanceKm: number = 50;
-  consommationPour100Km: number = 3;
-  voyages = [
-    { distanceKm: 50, consommationPour100Km: 5 },
-    { distanceKm: 150, consommationPour100Km: 6 },
-    { distanceKm: 250, consommationPour100Km: 7 },
-    { distanceKm: 350, consommationPour100Km: 8 },
-    { distanceKm: 450, consommationPour100Km: 9 }
-  ];
 
-    genererVoyage() {
-    const distanceKm = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    const consommationPour100Km = Math.floor(Math.random() * (12 - 3 + 1)) + 3;
-    this.voyages.push({ distanceKm, consommationPour100Km });
+  constructor(private carbonFootprintComputeService: CarbonFootprintComputeService) { }
+
+  get voyages() {
+    return this.carbonFootprintComputeService.voyages;
   }
 
-  
+  get consommationPour100Km() {
+    return this.carbonFootprintComputeService.consommationPour100Km;
+  }
+
+  get distanceKm() {
+    return this.carbonFootprintComputeService.distanceKm;
+  }
+
+  get resumeVoyages() {
+    return this.carbonFootprintComputeService.getResumeVoyages();
+  }
+
   ajouter100Km() {
-    this.distanceKm += 100;
+    this.carbonFootprintComputeService.ajouter100Km();
   }
-  
+
+  addVoyage(voyage: any) {
+    this.carbonFootprintComputeService.addVoyage(voyage);
+  }
+
+  genererVoyage() {
+    this.carbonFootprintComputeService.genererVoyage();
+  }
+
   ngOnInit() {
     console.log('Le composant a été initialisé.');
+    const resume = this.carbonFootprintComputeService.getResumeVoyages();
+    this.carbonFootprintComputeService.distanceKm = resume.distanceTotaleKm;
+    this.carbonFootprintComputeService.consommationPour100Km = resume.consommationMoyenne;
   }
 
   ngOnDestroy() {

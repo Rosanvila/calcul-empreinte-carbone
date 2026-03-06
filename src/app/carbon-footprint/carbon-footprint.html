@@ -26,6 +26,7 @@
         <tr>
             <th>Distance</th>
             <th>Consommation pour 100 kms</th>
+            <th>Quantité CO2</th>
         </tr>
     </thead>
     <tbody>
@@ -33,7 +34,13 @@
                     <tr>
                         <td>{{ voyage.distanceKm }} km</td>
                         <td>{{ voyage.consommationPour100Km }} L</td>
+                        <td>{{ voyage.quantiteCO2 | number:'1.2-2' }} kg CO2</td>
                     </tr>
                 }
     </tbody>
 </table>
+
+<h2>Résumé des voyages</h2>
+<p>Distance totale : {{ resumeVoyages.distanceTotaleKm }} km</p>
+<p>Consommation moyenne : {{ resumeVoyages.consommationMoyenne | number:'1.2-2' }} L/100km</p>
+<p>Quantité totale de CO2 : {{ resumeVoyages.quantiteCO2Totale | number:'1.2-2' }} kg CO2</p>
